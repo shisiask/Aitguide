@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>937 TRG Field Guide — Study Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#3f4a2f;
+    --olive-dark:#2a331f;
+    --khaki:#c9bd94;
+    --khaki-pale:#efe9d6;
+    --sand:#f6f2e7;
+    --navy:#1c2a33;
+    --ink:#20241d;
+    --orange:#c8611f;
+    --orange-bright:#e07b2e;
+    --ok:#4a6b3a;
+    --line:#d8cfae;
+    --white:#fffdf7;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--sand);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--orange); color:white;}
+
+  /* ---------- Layout shell ---------- */
+  .shell{display:flex; min-height:100vh;}
+  .sidebar{
+    width:280px; flex-shrink:0;
+    background:var(--olive-dark);
+    color:var(--khaki-pale);
+    display:flex; flex-direction:column;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .sidebar::-webkit-scrollbar{width:8px;}
+  .sidebar::-webkit-scrollbar-thumb{background:#4a5738; border-radius:4px;}
+
+  .brand{
+    padding:22px 20px 16px 20px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  .brand .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:.14em; color:var(--orange-bright);
+    text-transform:uppercase; margin-bottom:4px; display:block;
+  }
+  .brand h1{
+    font-family:'Oswald',sans-serif; font-size:22px; font-weight:600;
+    margin:0; line-height:1.15; letter-spacing:.02em; color:var(--white);
+  }
+  .brand .sub{font-size:11.5px; color:#a9b394; margin-top:6px;}
+
+  .searchwrap{padding:14px 16px;}
+  #searchInput{
+    width:100%; padding:10px 12px; border-radius:3px; border:1px solid #4a5738;
+    background:#2f3823; color:var(--white); font-family:'Inter',sans-serif; font-size:13px;
+    outline:none;
+  }
+  #searchInput::placeholder{color:#8a9470;}
+  #searchInput:focus{border-color:var(--orange-bright);}
+
+  nav.navlist{padding:4px 10px 20px 10px; flex:1;}
+  .navgroup-label{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em;
+    color:#8a9470; text-transform:uppercase; padding:14px 10px 6px 10px;
+  }
+  .navitem{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 10px; border-radius:3px; cursor:pointer;
+    font-size:13.5px; color:var(--khaki-pale); line-height:1.3;
+    border-left:3px solid transparent;
+  }
+  .navitem:hover{background:rgba(255,255,255,.06);}
+  .navitem.active{background:rgba(224,123,46,.16); border-left-color:var(--orange-bright); color:var(--white);}
+  .navitem .num{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:#8a9470; width:22px; flex-shrink:0;
+  }
+  .navitem.active .num{color:var(--orange-bright);}
+  .navitem .dot{
+    margin-left:auto; width:7px; height:7px; border-radius:50%; background:#4a5738; flex-shrink:0;
+  }
+  .navitem .dot.done{background:var(--orange-bright);}
+
+  .sidebar-footer{
+    padding:14px 20px; border-top:1px solid rgba(255,255,255,.1);
+    font-size:11px; color:#8a9470; font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- Main ---------- */
+  main{flex:1; min-width:0;}
+  .topbar{
+    position:sticky; top:0; z-index:5;
+    background:var(--sand); border-bottom:1px solid var(--line);
+    padding:14px 40px; display:flex; align-items:center; justify-content:space-between;
+    backdrop-filter: blur(4px);
+  }
+  .crumbs{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#7a7458; letter-spacing:.04em;}
+  .progresswrap{display:flex; align-items:center; gap:10px;}
+  .progressbar{width:150px; height:6px; background:var(--khaki); border-radius:3px; overflow:hidden;}
+  .progressbar-fill{height:100%; background:var(--orange); width:0%; transition:width .4s ease;}
+  .progresstext{font-family:'JetBrains Mono',monospace; font-size:11px; color:#7a7458;}
+
+  .content{padding:40px 40px 100px 40px; max-width:880px;}
+
+  /* Hero / overview */
+  .hero{
+    background:linear-gradient(135deg, var(--olive) 0%, var(--olive-dark) 100%);
+    color:var(--white); border-radius:6px; padding:44px 40px; position:relative; overflow:hidden;
+    margin-bottom:32px;
+  }
+  .hero::after{
+    content:""; position:absolute; right:-40px; top:-40px; width:220px; height:220px;
+    background:radial-gradient(circle, rgba(224,123,46,.25) 0%, transparent 70%);
+  }
+  .hero .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.16em; color:var(--orange-bright); text-transform:uppercase;}
+  .hero h2{font-family:'Oswald',sans-serif; font-size:38px; margin:10px 0 14px 0; font-weight:600; line-height:1.1;}
+  .hero p{font-size:15px; color:#d6dcc4; max-width:520px; line-height:1.6; margin:0 0 22px 0;}
+  .hero-stats{display:flex; gap:28px; flex-wrap:wrap; margin-top:22px; position:relative;}
+  .hero-stat .n{font-family:'Oswald',sans-serif; font-size:26px; color:var(--white); font-weight:600;}
+  .hero-stat .l{font-size:11px; color:#a9b394; text-transform:uppercase; letter-spacing:.06em;}
+  .hero-actions{display:flex; gap:12px; margin-top:24px; position:relative;}
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; padding:11px 20px;
+    border-radius:3px; border:none; cursor:pointer; letter-spacing:.01em;
+  }
+  .btn-primary{background:var(--orange); color:white;}
+  .btn-primary:hover{background:var(--orange-bright);}
+  .btn-ghost{background:transparent; color:var(--khaki-pale); border:1px solid rgba(255,255,255,.3);}
+  .btn-ghost:hover{border-color:var(--orange-bright); color:var(--orange-bright);}
+
+  .phase-strip{display:flex; gap:10px; margin-bottom:32px;}
+  .phase-card{
+    flex:1; background:var(--white); border:1px solid var(--line); border-radius:5px;
+    padding:16px 18px; border-top:4px solid var(--khaki);
+  }
+  .phase-card.p1{border-top-color:#8a9470;}
+  .phase-card.p2{border-top-color:var(--olive);}
+  .phase-card.p3{border-top-color:var(--orange);}
+  .phase-card .plabel{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.1em; color:#8a7f5e; text-transform:uppercase;}
+  .phase-card .pname{font-family:'Oswald',sans-serif; font-size:19px; font-weight:600; margin:2px 0 8px 0;}
+  .phase-card ul{margin:0; padding-left:16px; font-size:12.5px; color:#4a4a3a; line-height:1.7;}
+
+  .quick-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:36px;}
+  .quick-card{
+    background:var(--white); border:1px solid var(--line); border-radius:5px; padding:18px 20px;
+    cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .quick-card:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(63,74,47,.12);}
+  .quick-card .qc-title{font-family:'Oswald',sans-serif; font-weight:600; font-size:15px; margin-bottom:4px;}
+  .quick-card .qc-desc{font-size:12.5px; color:#6f6a52; line-height:1.5;}
+
+  /* Chapter view */
+  .chapter-head{margin-bottom:22px; padding-bottom:18px; border-bottom:2px solid var(--olive);}
+  .chapter-head .ch-num{
+    font-family:'JetBrains Mono',monospace; color:var(--orange); font-size:13px; letter-spacing:.1em;
+  }
+  .chapter-head h2{font-family:'Oswald',sans-serif; font-size:30px; margin:6px 0 0 0; font-weight:600; color:var(--olive-dark);}
+
+  .markdone{
+    display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-family:'JetBrains Mono',monospace;
+    padding:7px 12px; border-radius:20px; border:1px solid var(--line); cursor:pointer; margin-top:12px;
+    background:var(--white); color:#6f6a52;
+  }
+  .markdone.on{background:var(--olive); color:var(--white); border-color:var(--olive);}
+
+  .sec{margin-bottom:26px;}
+  .sec h3{
+    font-family:'Oswald',sans-serif; font-size:17px; color:var(--olive); font-weight:600;
+    margin:0 0 10px 0; padding-left:12px; border-left:3px solid var(--orange);
+  }
+  .sec p{font-size:14px; line-height:1.7; color:#33301f; margin:0 0 10px 0;}
+  .sec ul, .sec ol{margin:0 0 8px 0; padding-left:22px; font-size:14px; line-height:1.75; color:#33301f;}
+  .sec li{margin-bottom:4px;}
+  .sec table{width:100%; border-collapse:collapse; font-size:13px; margin:10px 0 16px 0; background:var(--white);}
+  .sec th{background:var(--olive); color:white; text-align:left; padding:8px 10px; font-family:'Oswald',sans-serif; font-weight:500; font-size:12.5px;}
+  .sec td{padding:7px 10px; border-bottom:1px solid var(--line);}
+  .sec tr:nth-child(even) td{background:var(--khaki-pale);}
+
+  .callout{
+    background:#fbeee0; border-left:4px solid var(--orange); border-radius:0 4px 4px 0;
+    padding:12px 16px; font-size:13.5px; margin:12px 0; color:#5c3a1a; line-height:1.6;
+  }
+  .callout b{color:var(--orange);}
+  .callout.crit{background:#f6e2df; border-left-color:#a13a2e; color:#6b241a;}
+  .callout.crit b{color:#a13a2e;}
+  .callout.ok{background:#e7ecdd; border-left-color:var(--ok); color:#33421f;}
+  .callout.ok b{color:var(--ok);}
+
+  .pillrow{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 16px 0;}
+  .pill{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; background:var(--khaki-pale);
+    border:1px solid var(--line); padding:4px 10px; border-radius:20px; color:#4a4a3a;
+  }
+
+  mark.hl{background:var(--orange-bright); color:white; padding:0 2px; border-radius:2px;}
+
+  .chnav{display:flex; justify-content:space-between; margin-top:40px; gap:12px;}
+  .chnav-btn{
+    flex:1; background:var(--white); border:1px solid var(--line); border-radius:5px; padding:14px 16px;
+    cursor:pointer; font-size:13px;
+  }
+  .chnav-btn:hover{border-color:var(--orange);}
+  .chnav-btn .dir{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8a7f5e; text-transform:uppercase;}
+  .chnav-btn .ttl{font-family:'Oswald',sans-serif; font-weight:600; margin-top:3px; color:var(--olive-dark);}
+  .chnav-btn.next{text-align:right;}
+
+  /* Quiz */
+  .quiz-setup{background:var(--white); border:1px solid var(--line); border-radius:6px; padding:30px; margin-bottom:20px;}
+  .quiz-setup h3{font-family:'Oswald',sans-serif; margin-top:0;}
+  .chiplist{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 22px 0;}
+  .chip{
+    padding:7px 14px; border-radius:20px; border:1px solid var(--line); background:var(--sand);
+    font-size:12.5px; cursor:pointer; user-select:none;
+  }
+  .chip.sel{background:var(--olive); color:white; border-color:var(--olive);}
+
+  .quizcard{
+    background:var(--white); border:1px solid var(--line); border-radius:6px; padding:34px;
+    min-height:220px; display:flex; flex-direction:column;
+  }
+  .quiz-progress{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8a7f5e; margin-bottom:14px;}
+  .quiz-q{font-family:'Oswald',sans-serif; font-size:19px; color:var(--olive-dark); line-height:1.4; margin-bottom:20px;}
+  .quiz-opts{display:flex; flex-direction:column; gap:10px;}
+  .quiz-opt{
+    text-align:left; padding:13px 16px; border:1px solid var(--line); border-radius:4px; background:var(--sand);
+    cursor:pointer; font-size:14px; font-family:'Inter',sans-serif;
+  }
+  .quiz-opt:hover{border-color:var(--olive);}
+  .quiz-opt.correct{background:#e7ecdd; border-color:var(--ok); color:#33421f; font-weight:600;}
+  .quiz-opt.wrong{background:#f6e2df; border-color:#a13a2e; color:#6b241a;}
+  .quiz-opt[disabled]{cursor:default;}
+  .quiz-footer{display:flex; justify-content:space-between; align-items:center; margin-top:24px;}
+  .score-badge{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#6f6a52;}
+  .explain{font-size:13px; color:#4a4a3a; background:var(--khaki-pale); padding:10px 14px; border-radius:4px; margin-top:16px; display:none;}
+  .explain.show{display:block;}
+
+  .quiz-result{text-align:center; padding:50px 30px;}
+  .quiz-result .big{font-family:'Oswald',sans-serif; font-size:52px; color:var(--olive); font-weight:600;}
+  .quiz-result .msg{font-size:14px; color:#6f6a52; margin:10px 0 26px 0;}
+
+  /* utility */
+  .hidden{display:none !important;}
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-thumb{background:var(--khaki); border-radius:5px;}
+
+  @media (max-width:820px){
+    .shell{flex-direction:column;}
+    .sidebar{position:relative; height:auto; width:100%;}
+    .content{padding:24px;}
+    .quick-grid{grid-template-columns:1fr;}
+    .phase-strip{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="tag">937th Training Group</span>
+      <h1>NPS AiT Field Guide</h1>
+      <div class="sub">Interactive study companion</div>
+    </div>
+    <div class="searchwrap">
+      <input id="searchInput" type="text" placeholder="Search the guide…" oninput="handleSearch(this.value)">
+    </div>
+    <nav class="navlist" id="navlist"></nav>
+    <div class="sidebar-footer">JBSA‑Fort Sam Houston &middot; Approved 4/17/26</div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="crumbs" id="crumbs">OVERVIEW</div>
+      <div class="progresswrap">
+        <div class="progressbar"><div class="progressbar-fill" id="progressFill"></div></div>
+        <div class="progresstext" id="progressText">0 / 0 reviewed</div>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   DATA
+   ========================================================= */
+const chapters = [
+{
+  id:"overview", num:"—", short:"Overview", title:"Guide Overview",
+  group:"START",
+  html:`
+    <div class="hero">
+      <span class="eyebrow">937 TRG &middot; JBSA-Fort Sam Houston</span>
+      <h2>Learn the whole<br>AiT guide, cold.</h2>
+      <p>This site turns the Non‑Prior Service Airmen in Training Guide into something you can actually study: browse every chapter in plain language, then test yourself in Quiz Mode until it sticks.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="goTo('customs')">Start with Chapter 1</button>
+        <button class="btn btn-ghost" onclick="goTo('quiz')">Jump to Quiz Mode</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="n">15</div><div class="l">Chapters</div></div>
+        <div class="hero-stat"><div class="n">13</div><div class="l">Attachments</div></div>
+        <div class="hero-stat"><div class="n">3</div><div class="l">Phases</div></div>
+        <div class="hero-stat"><div class="n">70+</div><div class="l">Quiz questions</div></div>
+      </div>
+    </div>
+
+    <div class="phase-strip">
+      <div class="phase-card p1">
+        <div class="plabel">Phase I</div>
+        <div class="pname">Min. 21 days</div>
+        <ul>
+          <li>Civilian clothes only in your own room</li>
+          <li>No alcohol, no tobacco, no POV</li>
+          <li>Wingman required off Route of March</li>
+          <li>Group PT 3x/week, mandatory</li>
+        </ul>
+      </div>
+      <div class="phase-card p2">
+        <div class="plabel">Phase II</div>
+        <div class="pname">Min. 90 days</div>
+        <ul>
+          <li>Off-base privileges, travel ≤100 mi</li>
+          <li>Alcohol if 21+, off base, out of uniform</li>
+          <li>Ride/drive a POV</li>
+          <li>Needs 85% GPA + 85% PT score to advance</li>
+        </ul>
+      </div>
+      <div class="phase-card p3">
+        <div class="plabel">Phase III</div>
+        <div class="pname">Until departure</div>
+        <ul>
+          <li>Travel ≤200 mi, monthly weekend pass</li>
+          <li>No marching required (solo)</li>
+          <li>Own room if space allows</li>
+          <li>Least supervision, most trust</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quick-grid">
+      <div class="quick-card" onclick="goTo('customs')"><div class="qc-title">1 · Customs &amp; Courtesies</div><div class="qc-desc">Reporting statements, bugle calls, saluting rules.</div></div>
+      <div class="quick-card" onclick="goTo('standards')"><div class="qc-title">2 · Standards &amp; Policies</div><div class="qc-desc">Mandatory carry items, formations, curfews.</div></div>
+      <div class="quick-card" onclick="goTo('medical')"><div class="qc-title">3 · Medical &amp; Dental</div><div class="qc-desc">Sick call, TMC, emergencies, dental care.</div></div>
+      <div class="quick-card" onclick="goTo('dress')"><div class="qc-title">4 · Dress &amp; Appearance</div><div class="qc-desc">Civilian attire rules, headgear, backpacks.</div></div>
+      <div class="quick-card" onclick="goTo('pt')"><div class="qc-title">5 · Physical Training</div><div class="qc-desc">PT schedule, appraisals, medical profiles.</div></div>
+      <div class="quick-card" onclick="goTo('dorm')"><div class="qc-title">6 · Dormitory Standards</div><div class="qc-desc">Room inspections, prohibited items, laundry.</div></div>
+      <div class="quick-card" onclick="goTo('safety')"><div class="qc-title">7 · Safety &amp; Security</div><div class="qc-desc">Evacuation, fire (SPEED), inclement weather.</div></div>
+      <div class="quick-card" onclick="goTo('accountability')"><div class="qc-title">8 · Accountability</div><div class="qc-desc">E-accountability, CQ, curfew/CTQ times.</div></div>
+      <div class="quick-card" onclick="goTo('dadp')"><div class="qc-title">9 · Development Programs</div><div class="qc-desc">Airman Leaders, ropes, drill team.</div></div>
+      <div class="quick-card" onclick="goTo('phase')"><div class="qc-title">10 · Phase Program</div><div class="qc-desc">Phase I/II/III requirements in detail.</div></div>
+      <div class="quick-card" onclick="goTo('travel')"><div class="qc-title">11 · Travel</div><div class="qc-desc">Lodging, overnight stays, leave, exodus.</div></div>
+      <div class="quick-card" onclick="goTo('general')"><div class="qc-title">12 · General Guidance</div><div class="qc-desc">Visitors, mail, out-processing, Discord.</div></div>
+      <div class="quick-card" onclick="goTo('conduct')"><div class="qc-title">13 · Conduct</div><div class="qc-desc">Alcohol/drugs, bullying, hazing, SAPR.</div></div>
+      <div class="quick-card" onclick="goTo('outreach')"><div class="qc-title">14 · Outreach &amp; Support</div><div class="qc-desc">Chaplain, MFLC, SARC, crisis lines.</div></div>
+      <div class="quick-card" onclick="goTo('deterrence')"><div class="qc-title">15 · Deterrence &amp; Corrective Actions</div><div class="qc-desc">Testing programs, phase-backs, QFM tools.</div></div>
+    </div>
+  `,
+  quiz:[]
+},
+
+{ id:"customs", num:"01", short:"Customs & Courtesies", title:"Customs and Courtesies", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Custom vs. courtesy</h3>
+  <p>A <b>custom</b> is an unwritten, tradition-based rule enforceable as unwritten law. A <b>courtesy</b> is guidance in written form. Together they build morale, esprit de corps, discipline, and respect for the chain of command.</p></div>
+
+  <div class="sec"><h3>Calling a room to order</h3>
+  <ul>
+    <li><b>Officer</b> enters/exits a common area → call the room to <b>"Attention"</b> (unless an equal/higher-ranking officer is already present).</li>
+    <li><b>SNCO, NCO, or MTL</b> enters → call <b>"Standby"</b> and assume parade rest until told to carry on.</li>
+    <li><b>Stairwells</b> are never called to attention for safety — just stand aside and let the person pass.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Reporting statement</h3>
+  <p>Before speaking to an NCO, SNCO, officer, civilian instructor, or TRG/METC staff: come to attention, salute (as appropriate), state the person's full rank and last name, then say:</p>
+  <div class="callout"><b>"Airman (last name) reports as ordered."</b> — no reporting statement is required during emergencies.</div>
+  <p>Reporting indoors: knock once, enter when told, march ~2 paces in, salute, deliver the statement. When finished, salute and hold it until acknowledged, then execute a facing movement and depart.</p></div>
+
+  <div class="sec"><h3>JBSA-FSH bugle calls</h3>
+  <table>
+    <tr><th>Call</th><th>Time</th><th>Meaning / Action</th></tr>
+    <tr><td>Reveille</td><td>0630</td><td>Start of duty day, colors raised. Face the flag/music; parade rest at first notes, attention + salute (or hand over heart if not in uniform) at "To the Colors"/anthem.</td></tr>
+    <tr><td>Mess Call</td><td>1200 (Mon–Fri)</td><td>Signals lunch. No required action.</td></tr>
+    <tr><td>Retreat</td><td>1700</td><td>End of duty day; same actions as Reveille.</td></tr>
+    <tr><td>Tattoo</td><td>2200</td><td>Lights out / quiet down within 15 minutes. Not the same as Taps.</td></tr>
+    <tr><td>Taps</td><td>2300</td><td>"Lights out." Remain still and quiet until it ends.</td></tr>
+  </table>
+  <div class="callout"><b>Salute a passing staff car or DV bus</b> with an officer's plate or flag.</div>
+  </div>
+  `,
+  quiz:[
+    {q:"What time is Reveille normally played on JBSA-FSH?", options:["0530","0600","0630","0715"], a:2},
+    {q:"What is the correct reporting statement to an officer?", options:["\"Airman (last name) reporting for duty, sir.\"","\"Airman (last name) reports as ordered.\"","\"(Rank) (last name), permission to enter.\"","\"Airman (last name), present and accounted for.\""], a:1},
+    {q:"When an SNCO, NCO, or MTL enters a room, Airmen should call the room to:", options:["Attention","Standby","At ease","Carry on"], a:1},
+    {q:"What time is \"Taps\" played on JBSA-FSH?", options:["2200","2230","2300","0001"], a:2},
+    {q:"Why are stairwells never called to attention?", options:["Tradition","Safety","No officers use stairwells","MTLs prohibit it"], a:1},
+  ]
+},
+
+{ id:"standards", num:"02", short:"Standards & Policies", title:"Standards and Policies", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Mandatory carry items (at all times)</h3>
+  <div class="pillrow">
+    <span class="pill">CAC / Military ID</span><span class="pill">2× AETC Form 341</span>
+    <span class="pill">Dorm room fob/key</span><span class="pill">Phase / Wingman card</span>
+    <span class="pill">Waivers &amp; appointment slips</span><span class="pill">Copy of orders (Guard/Reserve)</span>
+    <span class="pill">Reflective belt + phase patch</span><span class="pill">Squadron patch (if issued, OCP)</span>
+  </div>
+  <p>During the standard training day, also carry: blue/black pen, backpack (not during PT), an approved-color hydration source, and a wet-weather ECWCS jacket.</p>
+  <div class="callout crit"><b>Losing</b> a CAC, phase card, fob, or patch = loss of government property → possible admin action. A dorm fob costs about <b>$13.25</b> and you may be held liable.</div>
+  </div>
+
+  <div class="sec"><h3>Standard training day</h3>
+  <table>
+    <tr><th></th><th>Summer (1 Mar–31 Oct)</th><th>Winter (1 Nov–28/29 Feb)</th></tr>
+    <tr><td>Day begins</td><td>0430</td><td>0530</td></tr>
+    <tr><td>Day ends</td><td>1730</td><td>1830</td></tr>
+  </table>
+  <p>Formations are mandatory. All AiT in a marching formation must wear identical uniform styling. A flight = 13+ personnel; an element = usually 8–12 (used only when too few for a flight).</p>
+  </div>
+
+  <div class="sec"><h3>Appointment slips</h3>
+  <p>937 TRG Form 1 must be signed by a TTI, turned in to CQ the day <b>before</b> the appointment so an MTL can sign it that night, then picked up the next day. It must be signed at the appointment with contact number, signature, stamp, arrival and departure time.</p>
+  </div>
+
+  <div class="sec"><h3>Dining, fitness, vehicles</h3>
+  <ul>
+    <li><b>DFAC:</b> wash hands/sanitize on entry; no tank tops, midriffs, saggy pants, hats, soiled PTG, or open-toed shoes; keep OCP top on.</li>
+    <li><b>Fitness centers</b> authorized: METC Fitness Center, USO gym, Central Post gym, Beaver Fit/track, Jimmy Brought Fitness Center.</li>
+    <li><b>POVs</b> not usable during duty hours; motorcycles are never authorized for 937 TRG Airmen, on or off base.</li>
+  </ul>
+  </div>
+
+  <div class="sec"><h3>Cell phones, PDA, off-limits</h3>
+  <ul>
+    <li>Cell phones off during formations, on drill pads, in stairwells, near Acton front doors, and during PT (unless individual PT).</li>
+    <li>Headphones/earbuds banned on installation roads/sidewalks and while in uniform; allowed only in PTG during PT at fitness centers/tracks.</li>
+    <li><b>PDA is prohibited</b> anywhere on/around the dorm — no hand-holding, arm-in-arm, embracing, kissing.</li>
+    <li>While in uniform, tattoo/piercing shops are off-limits, and self/other tattooing is banned during initial skills training.</li>
+  </ul>
+  </div>
+  `,
+  quiz:[
+    {q:"How much does a dorm room fob cost (roughly), which an Airman may be liable to pay if lost?", options:["$5.00","$13.25","$25.00","$40.00"], a:1},
+    {q:"In summer months, what time does the standard training day begin?", options:["0400","0430","0500","0530"], a:1},
+    {q:"By when must a 937 TRG Form 1 appointment slip be returned to CQ?", options:["The morning of the appointment","NLT the day before the scheduled appointment","One week in advance","Immediately after the appointment"], a:1},
+    {q:"How many personnel typically make up a \"flight\" formation?", options:["3–5","8–12","13 or more","20 or more"], a:2},
+    {q:"Which of these is NOT an authorized fitness location for AiT?", options:["METC Fitness Center","USO gym","Any off-base commercial gym","Jimmy Brought Fitness Center"], a:2},
+    {q:"What is prohibited anywhere in or around the dorm, in or out of uniform?", options:["Studying in groups","Public displays of affection (PDA)","Wearing PTG after hours","Using the community bicycles"], a:1},
+  ]
+},
+
+{ id:"medical", num:"03", short:"Medical & Dental", title:"Medical and Dental Care", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Sick call vs. direct (non-emergent) care</h3>
+  <table>
+    <tr><th></th><th>Sick Call</th><th>Non-Emergent / Direct Care</th></tr>
+    <tr><td>Used for</td><td>Same-day symptoms</td><td>Ongoing/new conditions, not urgent</td></tr>
+    <tr><td>Report to MTL hallway by</td><td>NLT 0445</td><td>NLT 0600 (non-PT days)</td></tr>
+    <tr><td>TMC hours</td><td>0530–0730</td><td>—</td></tr>
+    <tr><td>Excuses PT?</td><td>—</td><td>No — does not excuse from PT</td></tr>
+  </table>
+  <p>Bring a completed <b>DD Form 689 (Individual Sick Slip)</b>, available at the CQ desk.</p>
+  </div>
+
+  <div class="sec"><h3>Emergencies</h3>
+  <div class="callout crit"><b>Loss of life, limb, or eyesight → call 911</b> immediately. On a cell phone, tell the dispatcher you're on JBSA-FSH.</div>
+  <p>For other emergencies during duty hours, report to an MTL/faculty/staff and call the <b>Military Health System Nurse Advice Line</b> before seeking ER care. Closest ER: Brooke Army Medical Center (BAMC).</p>
+  <p class="pillrow"><span class="pill">Nurse Advice Line: 1-800-TRICARE</span></p>
+  </div>
+
+  <div class="sec"><h3>Dental</h3>
+  <p>Budge Dental Clinic (across from Acton Dorms) handles dental <b>emergencies only</b> (pain, swelling, bleeding) — not cleanings, whitening, braces. After hours/weekends, dental emergencies go to BAMC ER.</p>
+  <p class="pillrow"><span class="pill">Budge Dental: (210) 808-3736 / 3735</span></p>
+  </div>
+  `,
+  quiz:[
+    {q:"By what time must Airmen report for sick call with a DD Form 689?", options:["0400","0445","0530","0600"], a:1},
+    {q:"Does non-emergent (direct care) medical care excuse an Airman from PT?", options:["Yes, always","No","Only if approved by a doctor","Only on non-PT days"], a:1},
+    {q:"For a medical emergency involving loss of life, limb, or eyesight, what should you do first?", options:["Report to an MTL","Call the Nurse Advice Line","Call 911","Go directly to Budge Dental"], a:2},
+    {q:"What does Budge Dental Clinic treat?", options:["Routine cleanings only","Dental emergencies only (pain, swelling, bleeding)","Braces and whitening","Any dental issue, anytime"], a:1},
+  ]
+},
+
+{ id:"dress", num:"04", short:"Dress & Appearance", title:"Dress and Appearance", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Civilian attire basics</h3>
+  <ul>
+    <li>Clean, no holes/rips/frays; no see-through fabric; no exposed midriff or cleavage.</li>
+    <li>Shoulder straps must be at least <b>2 inches wide</b> on both sides.</li>
+    <li>Shorts/skirts/dresses no shorter than the tip of the middle finger, arms extended at attention.</li>
+    <li>No sagging pants below the waist exposing undergarments; footwear always required outside the room.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Headgear</h3>
+  <div class="callout ok"><b>Authorized indoors with civilian attire:</b> bonnets, durags, bandanas (not covering the face), sweatbands, headscarfs, and approved religious items.</div>
+  <div class="callout crit"><b>Not authorized</b> anywhere indoors (civilian or uniform): visors, ball caps, sunglasses, or anything that shadows the face.</div>
+  <p>The OCP ballcap is never authorized for wear while assigned to 937 TRG, regardless of student status.</p>
+  </div>
+
+  <div class="sec"><h3>Backpacks &amp; mixing uniform items</h3>
+  <ul>
+    <li>Solid black only, no ornamentation/patches/gloss/dangling objects (BMT name tapes OK, small clasps OK, no chains).</li>
+    <li>Mixing PTG/OCP items with civilian clothes is not authorized on or off base — <i>exception:</i> approved squadron morale T-shirts may pair with PTG for TRG-approved events.</li>
+  </ul></div>
+  `,
+  quiz:[
+    {q:"What is the minimum shoulder strap width for civilian garments?", options:["1 inch","2 inches","3 inches","No minimum"], a:1},
+    {q:"Which of these is an authorized headgear item indoors with civilian attire?", options:["Ball cap","Sunglasses","Durag","Visor"], a:2},
+    {q:"Is the OCP ballcap authorized for wear while assigned to 937 TRG?", options:["Yes, always","Only in Phase III","Only during PT","No, never"], a:3},
+    {q:"What color must an Airman's backpack be?", options:["Any dark color","Solid black","Tan or coyote","Squadron color"], a:1},
+  ]
+},
+
+{ id:"pt", num:"05", short:"Physical Training", title:"Physical Training", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Weekly PT structure</h3>
+  <table>
+    <tr><th>Group</th><th>Organized Group PT</th><th>Individual PT allowed</th></tr>
+    <tr><td>Phase I</td><td>3x/week (Mon/Wed/Thu)</td><td>Not authorized</td></tr>
+    <tr><td>Phase II, &lt;90% last appraisal</td><td>3x/week</td><td>No</td></tr>
+    <tr><td>Phase II, ≥90% last appraisal</td><td>2x/week (Mon/Wed)</td><td>1x/week (Thu)</td></tr>
+    <tr><td>Phase III, &lt;90% last appraisal</td><td>3x/week</td><td>No</td></tr>
+    <tr><td>Phase III, ≥90% last appraisal</td><td>1x/week (Mon)</td><td>2x/week (Wed &amp; Thu)</td></tr>
+  </table>
+  <p>Summer PT starts <b>0440</b>; winter PT starts <b>1730</b>. All Airmen PT a minimum of 5x/week.</p>
+  </div>
+
+  <div class="sec"><h3>Quarterly appraisals</h3>
+  <ul>
+    <li>Components: waist-to-height ratio, push-ups, sit-ups, 2-mile run.</li>
+    <li>Passing composite score: <b>75%</b>. To qualify/stay in individual PT: <b>90%+</b> on all three timed/counted components.</li>
+    <li>Failing an appraisal → remedial PT + monthly re-testing until passing.</li>
+    <li>Alternate DAF components are prohibited; retests reassess all components.</li>
+  </ul></div>
+  `,
+  quiz:[
+    {q:"What score must Phase II or III Airmen have on their last PT appraisal to qualify for individual PT?", options:["75% or higher","80% or higher","90% or higher","100%"], a:2},
+    {q:"What time do summer organized PT sessions start?", options:["0400","0440","0500","0530"], a:1},
+    {q:"What is the minimum passing composite score on a quarterly PT appraisal?", options:["65%","70%","75%","80%"], a:2},
+    {q:"How many times per week are all Airmen expected to PT (combined organized + individual)?", options:["3","4","5","7"], a:2},
+    {q:"A Phase III Airman scoring 90%+ does organized group PT how many times a week?", options:["0","1 (Monday)","2","3"], a:1},
+  ]
+},
+
+{ id:"dorm", num:"06", short:"Dormitory Standards", title:"Dormitory Living Standards", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Layout &amp; access</h3>
+  <ul>
+    <li>Floors 1–2: male; floors 3–4: female. Co-ed labs/dayrooms sit in the center of each floor.</li>
+    <li>Elevators: only for Airmen on a medical profile stating "do not use stairs," or with MTL approval for luggage.</li>
+    <li>Use the stairwell near H-wing; all others are emergency-only.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Room inspection failure</h3>
+  <div class="callout crit"><b>4 demerits = room failure.</b> Failed rooms are re-inspected within 7 calendar days.</div>
+  <p>Automatic failures (security violations): unlocked closet/locker or entry door when unoccupied/sleeping; unsecured prescription meds.</p>
+  <p>Automatic failures (safety violations): heating elements left on/plugged in with no occupants; open flame/lit candles; weapons or knives &gt;3-inch blades; daisy-chained power strips.</p>
+  </div>
+
+  <div class="sec"><h3>Prohibited dormitory items</h3>
+  <div class="pillrow">
+    <span class="pill">Alcohol / empty bottles</span><span class="pill">Candles &amp; wax warmers</span>
+    <span class="pill">Hot plates / cooking devices</span><span class="pill">Coffee dispensers</span>
+    <span class="pill">Extension cords</span><span class="pill">Electric heaters</span>
+    <span class="pill">Incense</span><span class="pill">Illegal narcotics</span>
+    <span class="pill">Knives &gt;3&quot; blade</span><span class="pill">Mace / pepper spray</span>
+    <span class="pill">Pets (any kind)</span><span class="pill">Plants</span>
+    <span class="pill">Fireworks / flares</span><span class="pill">Flammable liquids</span>
+    <span class="pill">Weapons / weapon-like items</span><span class="pill">Hair dye</span>
+  </div>
+  <p>Ceilings need 18-inch clearance to any hanging structure — nothing may hang from the ceiling.</p>
+  </div>
+
+  <div class="sec"><h3>Visiting standards</h3>
+  <ul>
+    <li>Same-sex 937 TRG NPS AiT may be in a room 0800 hrs to 30 min before call-to-quarters, doors fully open, lights on, all occupants must verbally consent, visitors never left alone.</li>
+    <li>Entering an opposite-sex hallway requires announcing: <b>"Male/Female entering the hallway."</b></li>
+  </ul></div>
+  `,
+  quiz:[
+    {q:"How many room demerits constitute an automatic room failure?", options:["2","3","4","5"], a:2},
+    {q:"Within how many calendar days is a failed room re-inspected?", options:["3","5","7","14"], a:2},
+    {q:"What must you say before entering an opposite-sex hallway?", options:["\"Coming through\"","\"Male/Female entering the hallway\"","Nothing, just knock","\"Request permission to enter\""], a:1},
+    {q:"Which is a prohibited dormitory item?", options:["Microwave (issued)","Extension cords","Bleach (small percentage solutions)","Fans (issued)"], a:1},
+    {q:"An unlocked closet/wall locker while the occupant is out of the room results in:", options:["A warning only","One demerit","Automatic room failure (security violation)","No consequence"], a:2},
+    {q:"Which floors are designated female living areas in Acton Dorm?", options:["1 and 2","2 and 3","3 and 4","All floors, mixed"], a:2},
+  ]
+},
+
+{ id:"safety", num:"07", short:"Safety & Security", title:"Safety and Security", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Fire — remember SPEED</h3>
+  <table>
+    <tr><th>Letter</th><th>Action</th></tr>
+    <tr><td>S</td><td>Sound alarm (pull red fire alarm box)</td></tr>
+    <tr><td>P</td><td>Phone fire department (911 / 210-221-2222)</td></tr>
+    <tr><td>E</td><td>Extinguish, if possible (small fire only)</td></tr>
+    <tr><td>E</td><td>Evacuate building</td></tr>
+    <tr><td>D</td><td>Direct fire department personnel</td></tr>
+  </table>
+  <div class="callout crit">Tampering with fire extinguishers, alarm boxes, or smoke detectors is a <b>federal offense</b>.</div>
+  </div>
+
+  <div class="sec"><h3>Evacuation &amp; shelter</h3>
+  <ul>
+    <li>Primary evacuation point: <b>across the track</b>. Secondary: <b>under the DFAC overhang</b>.</li>
+    <li>Shelter-in-place location: staff latrines, 1st floor near CQ (or any windowless room, e.g. laundry rooms).</li>
+    <li>During an emergency evacuation, Airmen do <b>not</b> need to announce presence in an opposite-sex hallway.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Inclement weather</h3>
+  <ul>
+    <li><b>"Lightning within 5"</b> (5 nautical miles) → cease outdoor activity, seek indoor shelter, no troop bridge use until cleared.</li>
+    <li>Disaster warning signal = 3–5 minute steady tone/siren → cease activity, seek cover, brace. "All clear" is announced when the threat passes.</li>
+  </ul></div>
+
+  <div class="sec"><h3>High-risk activities</h3>
+  <p>Requires a personal safety briefing and an approved <b>AF Form 4391</b> before participating (skydiving, scuba, hang gliding, white-water rafting, bungee jumping, etc.). Unauthorized participation + injury = Airman may pay medical costs.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"In the fire safety mnemonic SPEED, what does the first E stand for?", options:["Evacuate","Extinguish (if possible)","Emergency call","Exit"], a:1},
+    {q:"What is the primary evacuation point for the Acton Dorms?", options:["The parking lot","Across the track","The DFAC","The front gate"], a:1},
+    {q:"\"Lightning within five\" means lightning has been detected within how many nautical miles?", options:["1","3","5","10"], a:2},
+    {q:"What form is required before participating in a high-risk activity like skydiving?", options:["AF Form 4392","AETC Form 341","AF Form 4391","DD Form 689"], a:2},
+    {q:"During an active building evacuation, must Airmen announce their presence in an opposite-sex hallway?", options:["Yes, always","No — emergencies don't require it","Only at night","Only if MTLs are absent"], a:1},
+  ]
+},
+
+{ id:"accountability", num:"08", short:"Accountability", title:"Accountability", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>The golden rule</h3>
+  <div class="callout crit">If you're physically <b>inside</b> the dorm, you're scanned <b>in</b>. If you're physically <b>outside</b>, you're scanned <b>out</b>. No exceptions.</div>
+  <p>Failure to comply with accountability procedures is a violation of <b>Article 92, UCMJ</b>. Never scan a photocopy/digital image of someone else's CAC.</p>
+  </div>
+
+  <div class="sec"><h3>Curfew &amp; Call-To-Quarters (CTQ)</h3>
+  <table>
+    <tr><th>Days</th><th>Curfew</th><th>Call-To-Quarters</th></tr>
+    <tr><td>Monday – Thursday</td><td>2030</td><td>2200</td></tr>
+    <tr><td>Friday &amp; Saturday</td><td>2330</td><td>0000</td></tr>
+    <tr><td>Nights before official holidays</td><td>2330</td><td>0000</td></tr>
+    <tr><td>Sunday</td><td>1930</td><td>2200</td></tr>
+  </table>
+  <p><b>Curfew</b> = must be physically inside Acton Dormitory. <b>Call-To-Quarters</b> = must be inside your assigned room. After the Sunday GI party, Airmen must be in their rooms NLT 2200.</p>
+  <div class="callout">Traffic, ride-share issues, or poor planning are <b>not</b> extenuating circumstances for missing report time.</div>
+  </div>
+
+  <div class="sec"><h3>Charge of Quarters (CQ)</h3>
+  <p>CQ exists for accountability and safety/security of Airmen and property. Airmen may not consume alcohol within <b>8 hours</b> of a CQ shift. CQ can pull an AETC Form 341 for infractions.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"What time is curfew Monday through Thursday?", options:["1930","2030","2200","2330"], a:1},
+    {q:"What is Call-To-Quarters time on Sunday?", options:["1930","2030","2200","2330"], a:2},
+    {q:"Which UCMJ article does failure to follow accountability procedures violate?", options:["Article 15","Article 32","Article 92","Article 134"], a:2},
+    {q:"How many hours before a CQ shift is alcohol consumption prohibited?", options:["4","6","8","12"], a:2},
+    {q:"Is traffic considered an extenuating circumstance for missing curfew?", options:["Yes, always","No","Only if documented","Only for Phase III"], a:1},
+  ]
+},
+
+{ id:"dadp", num:"09", short:"Development Programs", title:"Distinguished Airman Development Programs", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Airman Leader rope colors</h3>
+  <table>
+    <tr><th>Rope</th><th>Role</th></tr>
+    <tr><td>Green</td><td>Formation Commander; accountability &amp; cleanliness for assigned hallway/area</td></tr>
+    <tr><td>Yellow</td><td>Supervises Green Ropes; accounts for all personnel in assigned flight</td></tr>
+    <tr><td>Red</td><td>Supervises subordinate ALs; instructs/directs military training</td></tr>
+    <tr><td>Black</td><td>Drill Team — proficient in drill &amp; ceremonies, competes, assists MTLs</td></tr>
+    <tr><td>White</td><td>Chaplain Corps Liaison — community service, Landing Zone, morale events</td></tr>
+    <tr><td>Teal</td><td>SAPR Liaison — peer support tied to the SARC</td></tr>
+    <tr><td>Orange</td><td>Airmen Accelerators — innovation &amp; process improvement (JBSA-FSH specific)</td></tr>
+  </table>
+  <div class="callout">To keep rope status, Airmen Leaders must sustain an <b>85% GPA</b>, checked monthly.</div>
+  <p>Airmen may serve in up to <b>two</b> DADPs simultaneously. Ropes are worn on the left shoulder.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"Which rope color designates the Airmen Drill Team?", options:["Green","Black","White","Orange"], a:1},
+    {q:"What GPA must Airman Leaders sustain to keep their rope status?", options:["70%","80%","85%","90%"], a:2},
+    {q:"The Teal Rope is associated with which program?", options:["Chaplain Corps","SAPR (liaison to the SARC)","Drill Team","Innovation/process improvement"], a:1},
+    {q:"How many Distinguished Airman Development Programs can an Airman participate in at once?", options:["1","2","3","Unlimited"], a:1},
+    {q:"Which rope supervises the duty performance of Green Rope Airman Leaders?", options:["Yellow","Red","Black","White"], a:0},
+  ]
+},
+
+{ id:"phase", num:"10", short:"Phase Program", title:"Phase Program", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>The three phases at a glance</h3>
+  <table>
+    <tr><th>Activity</th><th>Phase I</th><th>Phase II</th><th>Phase III</th></tr>
+    <tr><td>Duration</td><td>Min. 21 days</td><td>Min. 90 days</td><td>Until departure</td></tr>
+    <tr><td>Open ranks</td><td>1 OCP + 1 Blues (to phase up)</td><td>1 OCP + 1 Blues / month</td><td>1 OCP OR Blues / 2 months</td></tr>
+    <tr><td>Room inspection</td><td>1x/week</td><td>2x/month</td><td>1x/month</td></tr>
+    <tr><td>Marching</td><td>Yes, w/ wingman</td><td>Yes</td><td>No, unless in formation/group</td></tr>
+    <tr><td>Civilian attire</td><td>Room only</td><td>After duty hours</td><td>After duty hours</td></tr>
+    <tr><td>Off-base privileges</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Travel distance</td><td>None</td><td>≤100 miles</td><td>≤200 miles</td></tr>
+    <tr><td>POV use</td><td>No (except emergency)</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Alcohol</td><td>No (any age)</td><td>Yes if 21+, off base, out of uniform</td><td>Yes if 21+, off base, out of uniform</td></tr>
+    <tr><td>Tobacco</td><td>No</td><td>Yes if legal age, out of uniform</td><td>Yes if legal age, out of uniform</td></tr>
+    <tr><td>Own room</td><td>No</td><td>No</td><td>If space permits</td></tr>
+    <tr><td>Curfew (Mon–Thu)</td><td>2030</td><td>2030</td><td>2030</td></tr>
+  </table>
+  </div>
+
+  <div class="sec"><h3>Phasing up requirements</h3>
+  <ul>
+    <li><b>Phase I → II:</b> pass 2 consecutive room inspections + 1 OCP + 1 Blues open ranks; attend initial assignment briefing; initiate overseas medical clearance/EFMP FSQ if applicable; apply for GTC if applicable.</li>
+    <li><b>Phase II → III:</b> 85%+ GPA and 85%+ PT appraisal score. Approved by a Flight Chief.</li>
+    <li>Break-In-Training (BIT) Airmen: minimum 7 days in Phase I if returning, pending inspections and knowledge checks.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Alcohol &amp; tobacco quick rule</h3>
+  <div class="callout crit">Under 21 = <b>never</b> allowed to possess, purchase, or consume alcohol, regardless of phase.</div>
+  `,
+  quiz:[
+    {q:"What is the minimum duration of Phase I?", options:["7 days","14 days","21 days","30 days"], a:2},
+    {q:"What is the minimum duration of Phase II?", options:["30 days","60 days","90 days","120 days"], a:2},
+    {q:"What GPA and PT score are required to advance from Phase II to Phase III?", options:["75% / 75%","80% / 80%","85% / 85%","90% / 90%"], a:2},
+    {q:"How far may a Phase II Airman travel from JBSA-FSH?", options:["50 miles","100 miles","150 miles","200 miles"], a:1},
+    {q:"How far may a Phase III Airman travel from JBSA-FSH?", options:["100 miles","150 miles","200 miles","No limit"], a:2},
+    {q:"Can a Phase I Airman consume alcohol if they are over 21?", options:["Yes, off base","Yes, in the dorm only","No — not permitted in Phase I regardless of age","Only with MTL approval"], a:2},
+    {q:"Who approves entry into Phase III?", options:["The Group Commander","A Flight Chief","Any MTL","The Squadron Chaplain"], a:1},
+  ]
+},
+
+{ id:"travel", num:"11", short:"Travel", title:"Travel", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Lodging &amp; overnight stays</h3>
+  <ul>
+    <li>Visiting lodging/hotels/rentals requires an authorized hotel visitation memo and an <b>AF Form 4392</b> (Predeparture Safety Briefing).</li>
+    <li>Phase III overnight stays/weekend passes: once per month, non-consecutive weekends (except case-by-case extenuating circumstances), requires 85%+ GPA, a pre-departure safety briefing, and complete travel plans.</li>
+    <li><b>AiT may never share overnight lodging with other AiT</b> (e.g., no shared Airbnb).</li>
+    <li>Returning from a weekend pass: sign back in by <b>1930</b> the day before a training day.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Leave</h3>
+  <p>Ordinary leave is not normally authorized for AiT (exceptions: emergency leave, holiday block leave). The Commander may approve leave in rare cases. Active Duty uses LeaveWeb; ANG/AFR use DAF Form 988.</p>
+  </div>
+
+  <div class="sec"><h3>Exodus / Holiday Block Leave</h3>
+  <p>A voluntary ~14-day window, typically covering Dec 25–Jan 1, where AiT may depart the training environment.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"What form is required for Airmen to visit off-base lodging or hotels?", options:["937 TRG Form 1","AETC Form 341","AF Form 4392","DD Form 689"], a:2},
+    {q:"Can AiT share overnight lodging (e.g., an Airbnb) with other AiT?", options:["Yes, if approved","Yes, always","No, never","Only in Phase III"], a:2},
+    {q:"By what time must Airmen returning from a weekend pass sign back in?", options:["1730","1930","2130","2330"], a:1},
+    {q:"How often may a Phase III Airman typically be granted an overnight weekend pass?", options:["Every weekend","Once a month","Once a quarter","Never"], a:1},
+  ]
+},
+
+{ id:"general", num:"12", short:"General Guidance", title:"General Guidance and Information", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Visitors &amp; mail</h3>
+  <ul>
+    <li>Visitors must wait outside the dorm unless conducting official business with prior approval.</li>
+    <li>Mail center hours: <b>Mon–Fri, 0900–1745</b>. Airmen must in-process the mail center on arrival and forward all mail on departure.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Out-processing</h3>
+  <p>30-day and 7-day out-processing briefings are <b>mandatory</b>. Starting early avoids delayed orders; failing to complete documentation on time can trigger admin action or a phase-back.</p>
+  </div>
+
+  <div class="sec"><h3>Discord</h3>
+  <div class="callout crit">At no time may a NPS AiT send a direct message or friend request to a 937 TRG member.</div>
+  <p>Check the Discord Hot Board and your AFSC/MTL channel at least <b>twice a day</b> (start and end).</p>
+  </div>
+  `,
+  quiz:[
+    {q:"What are the mail center's operating hours?", options:["0700–1600, Mon–Fri","0900–1745, Mon–Fri","0800–1700, 7 days","1000–1800, Mon–Sat"], a:1},
+    {q:"May an NPS AiT send a direct message to a 937 TRG member on Discord?", options:["Yes, if professional","Yes, with MTL permission","No, never","Only after Phase II"], a:2},
+    {q:"How often should Airmen check the Discord Hot Board?", options:["Once a week","Once a day","At least twice a day","Only when notified"], a:2},
+  ]
+},
+
+{ id:"conduct", num:"13", short:"Professional Conduct", title:"Professional Relationships and Conduct", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Alcohol &amp; tobacco (all Airmen)</h3>
+  <ul>
+    <li>Never consume alcohol within <b>8 hours</b> before a training day; never consume/possess in uniform (except Group CC-approved events).</li>
+    <li>No 937 TRG-designated smoking areas exist on JBSA-FSH; tobacco use is only for legal-age Airmen in Phase II/III, off base, out of uniform, after hours.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Zero Tolerance: drugs</h3>
+  <div class="callout crit">Possessing/consuming illegal narcotics, <b>or another person's prescribed medication</b>, is Zero Tolerance and punishable under the UCMJ.</div>
+  <p>Check the DoD-approved supplement list before using any over-the-counter product: opss.org/dietary-supplement-ingredients-prohibited-department-defense.</p>
+  </div>
+
+  <div class="sec"><h3>Unprofessional relationships</h3>
+  <p>MTLs/faculty/staff cannot form personal, intimate, or dating relationships with students — this restriction extends <b>180 days</b> after a student completes initial skills training. The same applies to a student's immediate family. PS (Prior Service) members must also avoid unprofessional relationships with NPS members, including after-hours socializing and social media contact.</p>
+  </div>
+
+  <div class="sec"><h3>Bullying vs. Hazing vs. Maltraining vs. Maltreatment</h3>
+  <table>
+    <tr><th>Term</th><th>Core definition</th></tr>
+    <tr><td>Bullying</td><td>Intent to harm physically/psychologically; no proper military purpose; can occur electronically</td></tr>
+    <tr><td>Hazing</td><td>Physical/psychological injury tied to initiation, admission, or continued membership in a group</td></tr>
+    <tr><td>Maltraining</td><td>By MTL/faculty/staff; no reasonable connection to a training objective; reckless/intentional harm</td></tr>
+    <tr><td>Cruelty &amp; Maltreatment</td><td>Superior-subordinate misconduct — physical or verbal</td></tr>
+  </table>
+  <div class="callout">Consent — implied or actual — from the "victim" is never a defense for bullying or hazing.</div>
+  </div>
+
+  <div class="sec"><h3>Zero tolerance categories</h3>
+  <p>Discrimination, stalking, harassment (unlawful &amp; sexual), assault, and sexual assault are all explicitly <b>Zero Tolerance</b> under Air Force and 937 TRG policy.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"How many hours before a training day must alcohol consumption stop?", options:["4","6","8","12"], a:2},
+    {q:"Is possessing another Airman's prescribed medication a Zero Tolerance violation?", options:["No, if it's for a minor ailment","Yes","Only if shared, not just possessed","Only for controlled substances"], a:1},
+    {q:"How long after a student completes initial skills training does the unprofessional-relationship restriction with MTLs/faculty/staff last?", options:["30 days","90 days","180 days","1 year"], a:2},
+    {q:"Which term describes harm inflicted by an MTL/faculty/staff with no reasonable connection to a training objective?", options:["Hazing","Bullying","Maltraining","Ostracism"], a:2},
+    {q:"Does a victim's implied consent excuse an act of hazing?", options:["Yes","No — consent is never a defense","Only if documented","Only for Phase III Airmen"], a:1},
+  ]
+},
+
+{ id:"outreach", num:"14", short:"Outreach & Support", title:"Outreach and Support Agencies", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Key contacts</h3>
+  <table>
+    <tr><th>Resource</th><th>Number</th></tr>
+    <tr><td>937 TRG Chaplain (text preferred)</td><td>(210) 852-0678</td></tr>
+    <tr><td>Command Post — on-call Chaplain (after hours)</td><td>(210) 221-9363</td></tr>
+    <tr><td>MFLC (duty hours only)</td><td>(210) 488-6804</td></tr>
+    <tr><td>Military OneSource</td><td>(800) 342-9647</td></tr>
+    <tr><td>Sexual Assault Crisis Hotline</td><td>(210) 808-7272</td></tr>
+    <tr><td>SARC Office</td><td>(210) 808-8981</td></tr>
+    <tr><td>DoD Safe Helpline</td><td>(877) 995-5247</td></tr>
+    <tr><td>National Suicide &amp; Crisis Lifeline / Military Crisis Line</td><td>988 (option 1 for military)</td></tr>
+    <tr><td>ADAPT Clinic (substance abuse)</td><td>(210) 292-7560</td></tr>
+    <tr><td>Legal Office</td><td>(210) 808-0169</td></tr>
+    <tr><td>Area Defense Counsel</td><td>(210) 221-9679</td></tr>
+  </table>
+  </div>
+
+  <div class="sec"><h3>Chaplain vs. MFLC confidentiality</h3>
+  <div class="callout ok"><b>Chaplain services are 100% confidential.</b></div>
+  <div class="callout"><b>MFLC services are confidential except</b> for the duty to warn if an Airman poses a threat to self or others.</div>
+  </div>
+
+  <div class="sec"><h3>Restricted vs. Unrestricted reporting (SAPR)</h3>
+  <table>
+    <tr><th></th><th>Restricted</th><th>Unrestricted</th></tr>
+    <tr><td>Confidential?</td><td>Yes — no investigation triggered</td><td>No — reported to command/law enforcement</td></tr>
+    <tr><td>Who to contact</td><td>SARC / SAPR VA / healthcare personnel</td><td>Law enforcement, SARC, healthcare, VVA, or command</td></tr>
+    <tr><td>Can switch?</td><td>Restricted → Unrestricted only (one-way)</td><td>Cannot switch to Restricted</td></tr>
+  </table>
+  </div>
+  `,
+  quiz:[
+    {q:"Are Chaplain services confidential?", options:["No","Yes, 100% confidential","Only for non-criminal matters","Only during duty hours"], a:1},
+    {q:"What is the one exception to MFLC confidentiality?", options:["Financial disclosures","Duty to warn if there's a threat to self or others","Academic issues","Minor uniform violations"], a:1},
+    {q:"Can a sexual assault report be switched from Unrestricted back to Restricted?", options:["Yes, anytime","Yes, within 24 hours","No — it can only go Restricted to Unrestricted","Only with SARC approval"], a:2},
+    {q:"What is the Military Crisis Line number?", options:["911","1-800-273-8255","988 (option 1)","(210) 808-7272"], a:2},
+  ]
+},
+
+{ id:"deterrence", num:"15", short:"Deterrence & Corrective Action", title:"Deterrence and Corrective Actions", group:"CHAPTERS",
+  html:`
+  <div class="sec"><h3>Deterrence programs</h3>
+  <ul>
+    <li><b>Drug Demand Reduction Program:</b> random urinalysis testing.</li>
+    <li><b>Random Portable Breathalyzer Program:</b> deterrent for underage alcohol use.</li>
+    <li><b>Random bag checks</b> and <b>Health, Morale, and Welfare (HM&amp;W) inspections</b> — no-notice, may include urine samples and/or room searches.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Corrective action tools</h3>
+  <ul>
+    <li><b>Physical exercise:</b> limited to <b>1 minute per correction</b> (push-ups, flutter kicks, sit-ups, planks, etc.). Can be applied to a whole team.</li>
+    <li><b>Remedial training:</b> short-term, tied to a specific deficiency (e.g., daily uniform checks after a failed inspection).</li>
+    <li><b>Remedial training day:</b> focuses on room/uniform inspections, Core Values, Enlisted Force Structure, drill/ceremony, fitness.</li>
+    <li><b>Phase-back:</b> minimum <b>7 calendar days</b> back in Phase I; must re-meet all Phase I requirements before advancing again.</li>
+  </ul></div>
+
+  <div class="sec"><h3>Quality Force Management progression</h3>
+  <p>AETC Form 341 → AF Form 174 (RIC) → Letter of Counseling → Letter of Admonishment → Letter of Reprimand → Non-Judicial Punishment (Article 15) → Judicial Punishment (court-martial).</p>
+  </div>
+  `,
+  quiz:[
+    {q:"What is the maximum duration of physical exercise as a corrective action per correction?", options:["30 seconds","1 minute","5 minutes","10 minutes"], a:1},
+    {q:"What is the minimum time an Airman stays in Phase I after being phased back?", options:["3 days","7 days","14 days","21 days"], a:1},
+    {q:"What is the purpose of Random Portable Breathalyzer Testing?", options:["Test for illegal drugs","Deter underage alcohol use","Check hydration levels","Monitor caffeine intake"], a:1},
+    {q:"Which comes first in the Quality Force Management progression?", options:["Letter of Reprimand","AETC Form 341","Non-Judicial Punishment","Court-martial"], a:1},
+  ]
+},
+
+{ id:"attachments", num:"ATT", short:"Attachments (Quick Ref)", title:"Attachments — Quick Reference", group:"REFERENCE",
+  html:`
+  <div class="sec"><h3>Forms cheat-sheet</h3>
+  <table>
+    <tr><th>Form</th><th>Purpose</th></tr>
+    <tr><td>AETC Form 341</td><td>Excellence/Discrepancy Report</td></tr>
+    <tr><td>937 TRG Form 1</td><td>Training Group Appointment Slip</td></tr>
+    <tr><td>DD Form 689</td><td>Individual Sick Slip</td></tr>
+    <tr><td>AF Form 4391</td><td>High-Risk Activities Worksheet</td></tr>
+    <tr><td>AF Form 4392</td><td>Predeparture Safety Briefing (lodging, overnight, travel-beyond-limit, leave)</td></tr>
+    <tr><td>AF Form 174</td><td>Record of Individualized Counseling</td></tr>
+    <tr><td>DAF Form 988</td><td>Leave Request/Authorization (ANG/AFR)</td></tr>
+  </table>
+  </div>
+
+  <div class="sec"><h3>Off-limits areas (without prior authorization)</h3>
+  <ul>
+    <li>Other training groups' technical training dorms</li>
+    <li>Sister-service dorms, ships, barracks</li>
+    <li>Permanent party dorms/ships/barracks</li>
+    <li>Privatized housing area for permanent party (incl. pools)</li>
+    <li>Community Center Banquet Hall &amp; hallway</li>
+    <li>Class Six &amp; Pecan Grove</li>
+  </ul></div>
+
+  <div class="sec"><h3>Rank insignia (memory aid)</h3>
+  <p>Enlisted ranks run E-1 (no insignia) through E-9. Officer ranks run O-1 (Second Lieutenant) through O-10 (General), plus Warrant Officer grades (Army/Marines/Navy/Coast Guard only — the Air Force has no warrant officers). Use Attachment 11 in the source guide for the full visual chart across all services.</p>
+  </div>
+
+  <div class="sec"><h3>Dorm dedication — SSgt Eric Acton</h3>
+  <p>Acton Dorm honors SSgt Eric Acton, a combat medic who deployed to Afghanistan in 2008, supported five Police Mentoring Teams, completed 50+ combat patrols, and treated an injured Afghan National Policeman under fire — earning the Air Force Commendation Medal, Army Commendation Medal, and Air Force Combat Action Medal. He passed away in 2014 due to a severe medical illness.</p>
+  </div>
+  `,
+  quiz:[
+    {q:"Which form is a Predeparture Safety Briefing used for lodging, overnight stays, and travel beyond phase limits?", options:["AETC Form 341","AF Form 4392","DD Form 689","937 TRG Form 1"], a:1},
+    {q:"Which of these is an off-limits area for AiT without prior authorization?", options:["The DFAC","The Post Exchange","Class Six","The Library"], a:2},
+    {q:"Does the Air Force have Warrant Officer ranks?", options:["Yes, O-1 through O-5 equivalent","No — unlike the Army, Marines, Navy, and Coast Guard","Yes, but only in flying units","Only in the Space Force"], a:1},
+    {q:"Acton Dormitory is named for an Airman who served as what specialty during deployment?", options:["Combat medic","Security forces","Intelligence officer","Chaplain assistant"], a:0},
+  ]
+},
+
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let currentId = "overview";
+let reviewed = new Set();
+let quizState = null;
+
+/* =========================================================
+   NAV RENDER
+   ========================================================= */
+function renderNav(filter=""){
+  const nav = document.getElementById('navlist');
+  nav.innerHTML = "";
+  let lastGroup = null;
+  const f = filter.trim().toLowerCase();
+
+  const items = chapters.filter(c=>{
+    if(!f) return true;
+    return (c.title+c.html+c.short).toLowerCase().includes(f);
+  });
+
+  items.forEach(c=>{
+    if(c.group !== lastGroup){
+      const lbl = document.createElement('div');
+      lbl.className='navgroup-label';
+      lbl.textContent = c.group;
+      nav.appendChild(lbl);
+      lastGroup = c.group;
+    }
+    const el = document.createElement('div');
+    el.className = 'navitem' + (c.id===currentId ? ' active':'');
+    el.onclick = ()=>goTo(c.id);
+    el.innerHTML = `<span class="num">${c.num}</span><span>${c.short}</span><span class="dot ${reviewed.has(c.id)?'done':''}"></span>`;
+    nav.appendChild(el);
+  });
+
+  // quiz nav item pinned
+  const qlbl = document.createElement('div');
+  qlbl.className='navgroup-label';
+  qlbl.textContent='PRACTICE';
+  nav.appendChild(qlbl);
+  const qel = document.createElement('div');
+  qel.className = 'navitem' + (currentId==='quiz' ? ' active':'');
+  qel.onclick = ()=>goTo('quiz');
+  qel.innerHTML = `<span class="num">Q</span><span>Quiz Mode</span>`;
+  nav.appendChild(qel);
+}
+
+function handleSearch(v){ renderNav(v); }
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+function updateProgress(){
+  const total = chapters.filter(c=>c.id!=='overview').length;
+  const done = [...reviewed].filter(id=>id!=='overview').length;
+  document.getElementById('progressFill').style.width = (total? (done/total*100):0)+'%';
+  document.getElementById('progressText').textContent = `${done} / ${total} reviewed`;
+}
+
+function toggleDone(id){
+  if(reviewed.has(id)) reviewed.delete(id); else reviewed.add(id);
+  updateProgress();
+  renderNav(document.getElementById('searchInput').value);
+  renderChapter(id);
+}
+
+/* =========================================================
+   CHAPTER RENDER
+   ========================================================= */
+function renderChapter(id){
+  const idx = chapters.findIndex(c=>c.id===id);
+  const c = chapters[idx];
+  const content = document.getElementById('content');
+  document.getElementById('crumbs').textContent = (c.group==='START'?'OVERVIEW':`CHAPTER ${c.num} · ${c.title}`).toUpperCase();
+
+  if(c.id==='overview'){
+    content.innerHTML = c.html;
+    return;
+  }
+
+  const prev = chapters[idx-1] && chapters[idx-1].id!=='overview' ? chapters[idx-1] : null;
+  const next = chapters[idx+1] || null;
+
+  content.innerHTML = `
+    <div class="chapter-head">
+      <div class="ch-num">CHAPTER ${c.num}</div>
+      <h2>${c.title}</h2>
+      <div class="markdone ${reviewed.has(c.id)?'on':''}" onclick="toggleDone('${c.id}')">
+        ${reviewed.has(c.id) ? '&#10003; Marked as reviewed' : '&#9711; Mark as reviewed'}
+      </div>
+    </div>
+    ${c.html}
+    <div class="chnav">
+      ${prev ? `<div class="chnav-btn" onclick="goTo('${prev.id}')"><div class="dir">&larr; Previous</div><div class="ttl">${prev.short}</div></div>` : `<div></div>`}
+      ${next ? `<div class="chnav-btn next" onclick="goTo('${next.id}')"><div class="dir">Next &rarr;</div><div class="ttl">${next.short}</div></div>` : `<div></div>`}
+    </div>
+  `;
+}
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+function renderQuizSetup(){
+  document.getElementById('crumbs').textContent = 'PRACTICE · QUIZ MODE';
+  const content = document.getElementById('content');
+  const chOptions = chapters.filter(c=>c.quiz && c.quiz.length);
+  content.innerHTML = `
+    <div class="chapter-head">
+      <div class="ch-num">PRACTICE</div>
+      <h2>Quiz Mode</h2>
+    </div>
+    <div class="quiz-setup">
+      <h3>Choose your topics</h3>
+      <p style="font-size:13.5px;color:#6f6a52;">Select one or more chapters, then start. Questions are pulled from those chapters and shuffled.</p>
+      <div class="chiplist" id="chipList">
+        <div class="chip sel" data-id="__all__">All chapters (${chOptions.reduce((n,c)=>n+c.quiz.length,0)} questions)</div>
+        ${chOptions.map(c=>`<div class="chip" data-id="${c.id}">${c.short} (${c.quiz.length})</div>`).join('')}
+      </div>
+      <button class="btn btn-primary" onclick="startQuiz()">Start quiz</button>
+    </div>
+  `;
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.onclick = ()=>{
+      if(chip.dataset.id==='__all__'){
+        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+        chip.classList.add('sel');
+      } else {
+        document.querySelector('.chip[data-id="__all__"]').classList.remove('sel');
+        chip.classList.toggle('sel');
+        const anySel = [...document.querySelectorAll('.chip')].some(c=>c.dataset.id!=='__all__' && c.classList.contains('sel'));
+        if(!anySel) document.querySelector('.chip[data-id="__all__"]').classList.add('sel');
+      }
+    };
+  });
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(){
+  const selected = [...document.querySelectorAll('.chip.sel')].map(c=>c.dataset.id);
+  let pool = [];
+  chapters.forEach(c=>{
+    if(!c.quiz || !c.quiz.length) return;
+    if(selected.includes('__all__') || selected.includes(c.id)){
+      c.quiz.forEach(q=>pool.push({...q, chapter:c.short}));
+    }
+  });
+  pool = shuffle(pool);
+  quizState = { pool, i:0, score:0, answered:false };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  const content = document.getElementById('content');
+  const {pool,i,score} = quizState;
+  if(i >= pool.length){
+    const pct = pool.length ? Math.round(score/pool.length*100) : 0;
+    content.innerHTML = `
+      <div class="quizcard quiz-result">
+        <div class="big">${pct}%</div>
+        <div class="msg">You scored ${score} out of ${pool.length} correct.</div>
+        <button class="btn btn-primary" onclick="renderQuizSetup()">Try another set</button>
+      </div>
+    `;
+    return;
+  }
+  const q = pool[i];
+  quizState.answered = false;
+  content.innerHTML = `
+    <div class="quizcard">
+      <div class="quiz-progress">QUESTION ${i+1} OF ${pool.length} &middot; ${q.chapter.toUpperCase()}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-opts" id="quizOpts">
+        ${q.options.map((opt,idx)=>`<button class="quiz-opt" onclick="answerQuiz(${idx})">${opt}</button>`).join('')}
+      </div>
+      <div class="explain" id="explain"></div>
+      <div class="quiz-footer">
+        <div class="score-badge">SCORE: ${score} / ${i}</div>
+        <button class="btn btn-ghost" id="nextBtn" style="display:none;" onclick="nextQuizQuestion()">Next question &rarr;</button>
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(idx){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  const q = quizState.pool[quizState.i];
+  const opts = document.querySelectorAll('#quizOpts .quiz-opt');
+  opts.forEach((btn,bi)=>{
+    btn.disabled = true;
+    if(bi===q.a) btn.classList.add('correct');
+    else if(bi===idx) btn.classList.add('wrong');
+  });
+  if(idx===q.a) quizState.score++;
+  document.getElementById('nextBtn').style.display='inline-block';
+  document.querySelector('.score-badge').textContent = `SCORE: ${quizState.score} / ${quizState.i+1}`;
+}
+
+function nextQuizQuestion(){
+  quizState.i++;
+  renderQuizQuestion();
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+function goTo(id){
+  currentId = id;
+  window.scrollTo({top:0, behavior:'instant'});
+  document.getElementById('content').scrollTop = 0;
+  renderNav(document.getElementById('searchInput').value);
+  if(id==='quiz') renderQuizSetup();
+  else renderChapter(id);
+}
+
+/* init */
+renderNav();
+renderChapter('overview');
+updateProgress();
+</script>
+</body>
+</html>
